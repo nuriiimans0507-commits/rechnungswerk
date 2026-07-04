@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glücksrad online – Zufallsrad zum Auslosen (kostenlos, ohne Anmeldung)</title>
+<meta name="description" content="Kostenloses Glücksrad online: eigene Einträge eintippen, Rad drehen, fairen Gewinner ziehen. Für Verlosungen, Unterricht, Familienentscheidungen. Ohne Anmeldung, ohne Tracking.">
+<link rel="canonical" href="https://nutzwerk24.de/gluecksrad/">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link href="../fonts/fonts.css" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Ist das Glücksrad wirklich zufällig und fair?","acceptedAnswer":{"@type":"Answer","text":"Ja. Der Gewinner wird mit dem Zufallsgenerator deines Browsers bestimmt. Jeder Eintrag hat exakt die gleiche Chance – das Rad ist reine Visualisierung des Ergebnisses."}},
+    {"@type":"Question","name":"Kann ich eigene Namen oder Optionen eintragen?","acceptedAnswer":{"@type":"Answer","text":"Ja. Einfach in das Textfeld tippen – ein Eintrag pro Zeile. Das Rad passt sich sofort an. Deine Liste wird lokal im Browser gespeichert und bleibt beim nächsten Besuch erhalten."}},
+    {"@type":"Question","name":"Wofür kann ich das Zufallsrad benutzen?","acceptedAnswer":{"@type":"Answer","text":"Typische Einsätze: Gewinner einer Verlosung ziehen, im Unterricht Schüler auswählen, Familienentscheidungen (Was kochen wir?), Aufgaben verteilen, Ja/Nein-Entscheidungen oder Icebreaker in Meetings."}},
+    {"@type":"Question","name":"Kostet das Glücksrad etwas oder brauche ich ein Konto?","acceptedAnswer":{"@type":"Answer","text":"Nein. Das Rad ist komplett kostenlos, ohne Anmeldung nutzbar und speichert nichts auf Servern – alle Daten bleiben in deinem Browser."}}
+  ]
+}
+</script>
+<style>
+  :root{
+    --ink:#23409F;
+    --ink-dark:#182C6B;
+    --paper:#FDFDFB;
+    --desk:#EDF0F4;
+    --text:#16202E;
+    --muted:#5B6B7E;
+    --line:#D4DAE3;
+    --win:#1E7F4F;
+    --radius:10px;
+    --font-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --font-num:"IBM Plex Mono","Consolas",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-ui);background:var(--desk);color:var(--text);line-height:1.55}
+  a{color:var(--ink)}
+  :focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
+
+  header.site{background:var(--paper);border-bottom:2px solid var(--ink);padding:14px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .wordmark{font-weight:700;font-size:1.05rem;letter-spacing:.02em;color:var(--ink-dark);text-decoration:none;display:flex;align-items:center;gap:9px}
+  .wordmark .mark{width:26px;height:26px;background:var(--ink);border-radius:7px;display:grid;place-items:center;font-family:var(--font-num);font-size:.8rem;font-weight:600;color:#fff}
+  header.site .claim{color:var(--muted);font-size:.88rem}
+
+  main{max-width:1080px;margin:0 auto;padding:28px 20px 60px}
+  .intro{max-width:720px;margin:6px auto 26px;text-align:center}
+  .intro h1{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.2;color:var(--ink-dark)}
+  .intro h1 em{font-style:normal;border-bottom:4px solid var(--ink);padding-bottom:2px}
+  .intro p{margin-top:10px;color:var(--muted);font-size:1rem}
+
+  .arena{display:grid;grid-template-columns:minmax(300px,1fr) minmax(280px,380px);gap:30px;align-items:start}
+  @media (max-width:820px){.arena{grid-template-columns:1fr}}
+
+  .wheel-box{position:relative;display:flex;flex-direction:column;align-items:center;gap:18px}
+  .wheel-wrap{position:relative;width:min(92vw,480px);aspect-ratio:1}
+  canvas{width:100%;height:100%;display:block;cursor:pointer;filter:drop-shadow(0 6px 18px rgba(24,44,107,.18))}
+  .pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:26px solid var(--ink-dark);z-index:2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25))}
+  .btn{border:0;border-radius:8px;padding:14px 26px;font:inherit;font-weight:700;cursor:pointer;font-size:1.1rem}
+  .btn-spin{background:var(--ink);color:#fff;min-width:220px}
+  .btn-spin:hover{background:var(--ink-dark)}
+  .btn-spin:disabled{opacity:.55;cursor:wait}
+
+  .result{min-height:64px;text-align:center}
+  .result .label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .result .name{font-size:clamp(1.4rem,4vw,2rem);font-weight:700;color:var(--win)}
+  .result .actions{margin-top:8px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .result button{border:1px solid var(--line);background:var(--paper);border-radius:7px;padding:7px 14px;font:inherit;font-size:.86rem;cursor:pointer;color:var(--text)}
+  .result button:hover{border-color:var(--ink);color:var(--ink)}
+
+  .panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+  .panel h2{font-size:.95rem;color:var(--ink-dark);margin-bottom:8px}
+  textarea{width:100%;min-height:220px;padding:10px;border:1px solid var(--line);border-radius:7px;font:inherit;font-size:.95rem;resize:vertical;background:#fff;color:var(--text)}
+  textarea:focus{border-color:var(--ink)}
+  .panel .hint{font-size:.78rem;color:var(--muted);margin-top:6px}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .presets button{border:1.5px dashed var(--line);background:none;border-radius:99px;padding:6px 13px;font:inherit;font-size:.82rem;color:var(--ink);cursor:pointer}
+  .presets button:hover{border-color:var(--ink);background:#F5F7FC}
+  .count{font-family:var(--font-num);font-size:.78rem;color:var(--muted);margin-top:10px}
+
+  .know{max-width:780px;margin:56px auto 0}
+  .know h2{color:var(--ink-dark);font-size:1.25rem;margin:32px 0 12px}
+  .know p{margin-bottom:12px}
+  .use-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:16px 0}
+  .use{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px}
+  .use strong{color:var(--ink-dark);display:block;margin-bottom:4px}
+  .use span{font-size:.88rem;color:var(--muted)}
+  details{border:1px solid var(--line);border-radius:8px;background:var(--paper);margin-bottom:9px}
+  summary{padding:13px 16px;font-weight:600;cursor:pointer;color:var(--ink-dark)}
+  details p{padding:0 16px 14px;color:var(--text)}
+
+  footer.site{border-top:1px solid var(--line);color:var(--muted);font-size:.84rem;padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap;justify-content:center;background:var(--paper);margin-top:40px}
+  footer.site a{color:var(--muted)}
+  @media (prefers-reduced-motion:reduce){canvas{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <a class="wordmark" href="../"><span class="mark">N24</span>Nutzwerk24</a>
+  <span class="claim">Glücksrad – der faire Zufalls-Entscheider.</span>
+</header>
+
+<main>
+  <div class="intro">
+    <h1>Glücksrad online – <em>tippen, drehen, entschieden</em></h1>
+    <p>Eigene Namen oder Optionen eintragen, Rad drehen, fairen Gewinner ziehen. Kostenlos, ohne Anmeldung – deine Liste bleibt in deinem Browser.</p>
+  </div>
+
+  <div class="arena">
+    <div class="wheel-box">
+      <div class="wheel-wrap">
+        <div class="pointer" aria-hidden="true"></div>
+        <canvas id="wheel" width="960" height="960" aria-label="Glücksrad – klicken zum Drehen"></canvas>
+      </div>
+      <button class="btn btn-spin" id="spinBtn">🎡 Drehen!</button>
+      <div class="result" id="result" aria-live="polite"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Deine Einträge (einer pro Zeile)</h2>
+      <textarea id="entries" spellcheck="false">Anna
+Ben
+Clara
+David
+Emre
+Fiona</textarea>
+      <p class="hint">Änderungen erscheinen sofort im Rad. Mindestens 2 Einträge.</p>
+      <div class="presets">
+        <button type="button" data-preset="Ja&#10;Nein">Ja / Nein</button>
+        <button type="button" data-preset="Ja&#10;Nein&#10;Vielleicht">Ja / Nein / Vielleicht</button>
+        <button type="button" data-preset="1&#10;2&#10;3&#10;4&#10;5&#10;6&#10;7&#10;8&#10;9&#10;10">Zahlen 1–10</button>
+        <button type="button" data-preset="Pizza&#10;Pasta&#10;Burger&#10;Salat&#10;Sushi&#10;Döner">Was essen wir?</button>
+      </div>
+      <p class="count" id="count"></p>
+    </div>
+  </div>
+
+  <section class="know">
+    <h2>Wofür Menschen das Zufallsrad benutzen</h2>
+    <div class="use-grid">
+      <div class="use"><strong>Verlosungen</strong><span>Gewinnspiel-Gewinner transparent und nachvollziehbar ziehen.</span></div>
+      <div class="use"><strong>Unterricht</strong><span>Schüler fair drannehmen oder Gruppen auslosen – ohne „immer die Gleichen“.</span></div>
+      <div class="use"><strong>Familienrat</strong><span>Was kochen wir? Wer räumt ab? Das Rad entscheidet ohne Diskussion.</span></div>
+      <div class="use"><strong>Team &amp; Meetings</strong><span>Wer moderiert? Wer holt Kaffee? Icebreaker mit Fairness-Garantie.</span></div>
+    </div>
+
+    <h2>Häufige Fragen</h2>
+    <details><summary>Ist das Rad wirklich fair?</summary><p>Ja. Der Gewinner wird per Zufallsgenerator bestimmt – jede Option hat exakt dieselbe Chance, egal wo sie im Rad steht. Die Drehanimation visualisiert nur das Ergebnis.</p></details>
+    <details><summary>Werden meine Einträge gespeichert?</summary><p>Nur lokal in deinem Browser, damit deine Liste beim nächsten Besuch noch da ist. Es wird nichts an Server übertragen. </p></details>
+    <details><summary>Kann ich einen Gewinner aus dem Rad entfernen?</summary><p>Ja – nach jedem Dreh erscheint „Gewinner entfernen“. So kannst du z. B. bei einer Verlosung mehrere Plätze nacheinander ziehen, ohne dass jemand doppelt gewinnt.</p></details>
+    <details><summary>Funktioniert das Glücksrad auf dem Handy?</summary><p>Ja, das Rad passt sich jeder Bildschirmgröße an und läuft in jedem modernen Browser – ohne App, ohne Installation.</p></details>
+  </section>
+</main>
+
+<footer class="site">
+  <span>Glücksrad – ein Werkzeug von <a href="../">Nutzwerk24</a></span>
+  <a href="../impressum.html">Impressum</a>
+  <a href="../datenschutz.html">Datenschutz</a>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var LS_KEY = "nutzwerk_gluecksrad_v1";
+  var canvas = document.getElementById("wheel");
+  var ctx = canvas.getContext("2d");
+  var entriesEl = document.getElementById("entries");
+  var resultEl = document.getElementById("result");
+  var spinBtn = document.getElementById("spinBtn");
+  var countEl = document.getElementById("count");
+
+  var COLORS = ["#23409F","#3D6BE0","#1E7F4F","#B54708","#7A3AA8","#182C6B","#C0392B","#0E7490"];
+  var rotation = 0;        // aktueller Drehwinkel in rad
+  var spinning = false;
+
+  function getEntries(){
+    return entriesEl.value.split("\n").map(function(s){return s.trim();}).filter(Boolean);
+  }
+
+  function textColor(){ return "#FFFFFF"; }
+
+  function draw(){
+    var items = getEntries();
+    var n = items.length;
+    var W = canvas.width, cx = W/2, cy = W/2, r = W/2 - 14;
+    ctx.clearRect(0,0,W,W);
+    if(n < 2){
+      ctx.fillStyle = "#96A3B4";
+      ctx.font = "500 36px 'IBM Plex Sans', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("Mindestens 2 Einträge …", cx, cy);
+      return;
+    }
+    var seg = (Math.PI*2)/n;
+    for(var i=0;i<n;i++){
+      var start = rotation + i*seg;
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,r,start,start+seg);
+      ctx.closePath();
+      ctx.fillStyle = COLORS[i % COLORS.length];
+      if(n % COLORS.length === 1 && i === n-1){ ctx.fillStyle = COLORS[1]; }
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,.9)";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      // Label
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(start + seg/2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = textColor();
+      var label = items[i].length > 18 ? items[i].slice(0,17)+"…" : items[i];
+      var fs = Math.max(20, Math.min(40, 620/n));
+      ctx.font = "600 "+fs+"px 'IBM Plex Sans', sans-serif";
+      ctx.fillText(label, r-26, fs/3);
+      ctx.restore();
+    }
+    // Nabe
+    ctx.beginPath();
+    ctx.arc(cx,cy,46,0,Math.PI*2);
+    ctx.fillStyle = "#FDFDFB";
+    ctx.fill();
+    ctx.strokeStyle = "#182C6B";
+    ctx.lineWidth = 5;
+    ctx.stroke();
+    ctx.fillStyle = "#182C6B";
+    ctx.font = "600 26px 'IBM Plex Mono', monospace";
+    ctx.textAlign = "center";
+    ctx.fillText("N24", cx, cy+9);
+    countEl.textContent = n + " Einträge im Rad";
+  }
+
+  function easeOutCubic(t){ return 1 - Math.pow(1-t,3); }
+
+  var audioCtx = null;
+  function tick(){
+    try{
+      if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+      var o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.frequency.value = 880; g.gain.value = 0.04;
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(); o.stop(audioCtx.currentTime + 0.02);
+    }catch(e){}
+  }
+
+  function spin(){
+    var items = getEntries();
+    if(spinning || items.length < 2) return;
+    spinning = true;
+    spinBtn.disabled = true;
+    resultEl.innerHTML = "";
+    var n = items.length;
+    var seg = (Math.PI*2)/n;
+    var winner = Math.floor(Math.random()*n);            // fairer Zufall
+    // Zielwinkel: Gewinner-Segmentmitte unter den Zeiger (-90°) bringen
+    var pointer = -Math.PI/2;
+    var target = pointer - (winner*seg + seg/2);
+    var current = rotation % (Math.PI*2);
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var turns = reduced ? 1 : 5 + Math.floor(Math.random()*3);
+    var final = target - Math.PI*2*turns;
+    // normalisieren, sodass final < current (wir drehen "rückwärts" optisch = im Uhrzeigersinn erhöhen wir negativ)
+    while(final > current){ final -= Math.PI*2; }
+    var dist = final - current;
+    var dur = reduced ? 600 : 4200 + Math.random()*600;
+    var t0 = performance.now();
+    var lastSeg = -1;
+    function frame(now){
+      var t = Math.min(1,(now-t0)/dur);
+      rotation = current + dist*easeOutCubic(t);
+      var segNow = Math.floor(((pointer - rotation)%(Math.PI*2)+Math.PI*2)%(Math.PI*2)/seg);
+      if(segNow !== lastSeg){ lastSeg = segNow; if(!reduced) tick(); }
+      draw();
+      if(t < 1){ requestAnimationFrame(frame); }
+      else {
+        spinning = false;
+        spinBtn.disabled = false;
+        showWinner(items[winner]);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function showWinner(name){
+    resultEl.innerHTML =
+      '<div class="label">Das Rad hat entschieden</div>' +
+      '<div class="name">🎉 '+ name.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];}) +'</div>' +
+      '<div class="actions">' +
+        '<button type="button" id="removeWinner">Gewinner entfernen</button>' +
+        '<button type="button" id="again">Nochmal drehen</button>' +
+      '</div>';
+    document.getElementById("again").addEventListener("click", spin);
+    document.getElementById("removeWinner").addEventListener("click", function(){
+      var items = getEntries().filter(function(x){ return x !== name; });
+      entriesEl.value = items.join("\n");
+      resultEl.innerHTML = "";
+      save(); draw();
+    });
+  }
+
+  function save(){ try{ localStorage.setItem(LS_KEY, entriesEl.value); }catch(e){} }
+
+  entriesEl.addEventListener("input", function(){ save(); draw(); });
+  spinBtn.addEventListener("click", spin);
+  canvas.addEventListener("click", spin);
+  document.querySelectorAll(".presets button").forEach(function(b){
+    b.addEventListener("click", function(){
+      entriesEl.value = b.getAttribute("data-preset").replace(/&#10;/g,"\n");
+      save(); resultEl.innerHTML = ""; draw();
+    });
+  });
+
+  try{
+    var saved = localStorage.getItem(LS_KEY);
+    if(saved && saved.trim()) entriesEl.value = saved;
+  }catch(e){}
+  draw();
+  window.__spinTest = spin; // interner Hook für automatisierte Tests
+})();
+</script>
+</body>
+</html>
