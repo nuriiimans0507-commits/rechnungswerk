@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prozentrechner online – Prozent einfach berechnen (kostenlos)</title>
+<meta name="description" content="Prozentrechner für alle Fälle: Prozentwert, Prozentsatz, prozentuale Veränderung und Mehrwertsteuer (19 % / 7 %). Einfach Zahlen eintippen, Ergebnis sofort sehen. Kostenlos und ohne Anmeldung.">
+<link rel="canonical" href="https://nutzwerk24.de/prozent/">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link href="../fonts/fonts.css" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Wie rechne ich Prozent von einem Betrag aus?","acceptedAnswer":{"@type":"Answer","text":"Betrag mal Prozentsatz geteilt durch 100. Beispiel: 20 % von 150 € = 150 × 20 ÷ 100 = 30 €."},
+    {"@type":"Question","name":"Wie berechne ich, wie viel Prozent eine Zahl von einer anderen ist?","acceptedAnswer":{"@type":"Answer","text":"Teilwert geteilt durch Grundwert mal 100. Beispiel: 30 von 150 = 30 ÷ 150 × 100 = 20 %."},
+    {"@type":"Question","name":"Wie berechne ich eine prozentuale Veränderung?","acceptedAnswer":{"@type":"Answer","text":"(Neuer Wert minus alter Wert) geteilt durch alten Wert mal 100. Beispiel: von 80 auf 100 = (100−80) ÷ 80 × 100 = +25 %."},
+    {"@type":"Question","name":"Wie rechne ich die Mehrwertsteuer heraus?","acceptedAnswer":{"@type":"Answer","text":"Bei 19 % MwSt: Bruttobetrag geteilt durch 1,19 ergibt den Nettobetrag. Beispiel: 119 € brutto ÷ 1,19 = 100 € netto, enthaltene MwSt: 19 €."}
+  ]
+}
+</script>
+<style>
+  :root{
+    --ink:#23409F;--ink-dark:#182C6B;--paper:#FDFDFB;--desk:#EDF0F4;--text:#16202E;--muted:#5B6B7E;--line:#D4DAE3;--win:#1E7F4F;--radius:10px;
+    --font-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --font-num:"IBM Plex Mono","Consolas",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-ui);background:var(--desk);color:var(--text);line-height:1.55}
+  a{color:var(--ink)}
+  :focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
+  header.site{background:var(--paper);border-bottom:2px solid var(--ink);padding:14px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .wordmark{font-weight:700;font-size:1.05rem;color:var(--ink-dark);text-decoration:none;display:flex;align-items:center;gap:9px}
+  .wordmark .mark{width:26px;height:26px;background:var(--ink);border-radius:7px;display:grid;place-items:center;font-family:var(--font-num);font-size:.8rem;font-weight:600;color:#fff}
+  header.site .claim{color:var(--muted);font-size:.88rem}
+  main{max-width:980px;margin:0 auto;padding:28px 20px 60px}
+  .intro{max-width:720px;margin:6px auto 30px;text-align:center}
+  .intro h1{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.2;color:var(--ink-dark)}
+  .intro h1 em{font-style:normal;border-bottom:4px solid var(--ink);padding-bottom:2px}
+  .intro p{margin-top:10px;color:var(--muted)}
+  .calcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+  .calc{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .calc h2{font-size:1.02rem;color:var(--ink-dark);margin-bottom:4px}
+  .calc .bsp{font-size:.78rem;color:var(--muted);margin-bottom:14px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;font-size:.95rem}
+  .row span{color:var(--muted)}
+  input[type=text]{width:110px;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-family:var(--font-num);font-size:1rem;background:#fff;color:var(--text);text-align:right}
+  input:focus{border-color:var(--ink)}
+  select{padding:9px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
+  .res{margin-top:6px;padding:12px 14px;background:var(--desk);border-radius:8px;font-size:.95rem;min-height:46px}
+  .res strong{font-family:var(--font-num);font-size:1.25rem;color:var(--ink-dark)}
+  .res.ok strong{color:var(--win)}
+  .res .sub{display:block;font-size:.8rem;color:var(--muted);margin-top:2px}
+  .know{max-width:780px;margin:56px auto 0}
+  .know h2{color:var(--ink-dark);font-size:1.25rem;margin:32px 0 12px}
+  .know p{margin-bottom:12px}
+  details{border:1px solid var(--line);border-radius:8px;background:var(--paper);margin-bottom:9px}
+  summary{padding:13px 16px;font-weight:600;cursor:pointer;color:var(--ink-dark)}
+  details p{padding:0 16px 14px}
+  footer.site{border-top:1px solid var(--line);color:var(--muted);font-size:.84rem;padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap;justify-content:center;background:var(--paper);margin-top:40px}
+  footer.site a{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <a class="wordmark" href="../"><span class="mark">N24</span>Nutzwerk24</a>
+  <span class="claim">Prozentrechner – tippen, fertig, weiterleben.</span>
+</header>
+
+<main>
+  <div class="intro">
+    <h1>Prozentrechner – <em>alle vier Fälle auf einen Blick</em></h1>
+    <p>Einfach Zahlen eintippen, das Ergebnis erscheint sofort. Komma oder Punkt – beides funktioniert.</p>
+  </div>
+
+  <div class="calcs">
+    <div class="calc">
+      <h2>Wie viel sind X % von Y?</h2>
+      <p class="bsp">Beispiel: 20 % Rabatt auf 150 € → 30 € sparen</p>
+      <div class="row"><input type="text" id="aP" inputmode="decimal" placeholder="20"><span>% von</span><input type="text" id="aG" inputmode="decimal" placeholder="150"></div>
+      <div class="res" id="aRes">Ergebnis erscheint hier …</div>
+    </div>
+
+    <div class="calc">
+      <h2>X ist wie viel % von Y?</h2>
+      <p class="bsp">Beispiel: 30 von 150 → 20 %</p>
+      <div class="row"><input type="text" id="bW" inputmode="decimal" placeholder="30"><span>ist wie viel % von</span><input type="text" id="bG" inputmode="decimal" placeholder="150"></div>
+      <div class="res" id="bRes">Ergebnis erscheint hier …</div>
+    </div>
+
+    <div class="calc">
+      <h2>Veränderung in Prozent</h2>
+      <p class="bsp">Beispiel: Preis stieg von 80 € auf 100 € → +25 %</p>
+      <div class="row"><span>von</span><input type="text" id="cA" inputmode="decimal" placeholder="80"><span>auf</span><input type="text" id="cB" inputmode="decimal" placeholder="100"></div>
+      <div class="res" id="cRes">Ergebnis erscheint hier …</div>
+    </div>
+
+    <div class="calc">
+      <h2>Mehrwertsteuer-Rechner</h2>
+      <p class="bsp">Netto ↔ Brutto bei 19 % oder 7 %</p>
+      <div class="row">
+        <input type="text" id="dBetrag" inputmode="decimal" placeholder="119">
+        <select id="dTyp"><option value="brutto">€ brutto</option><option value="netto">€ netto</option></select>
+        <select id="dSatz"><option value="19">19 % MwSt</option><option value="7">7 % MwSt</option></select>
+      </div>
+      <div class="res" id="dRes">Ergebnis erscheint hier …</div>
+    </div>
+  </div>
+
+  <section class="know">
+    <h2>Die Formeln hinter dem Rechner</h2>
+    <p><strong>Prozentwert:</strong> Grundwert × Prozentsatz ÷ 100 &nbsp;·&nbsp; <strong>Prozentsatz:</strong> Teilwert ÷ Grundwert × 100 &nbsp;·&nbsp; <strong>Veränderung:</strong> (neu − alt) ÷ alt × 100 &nbsp;·&nbsp; <strong>Netto aus Brutto (19 %):</strong> Brutto ÷ 1,19</p>
+
+    <h2>Häufige Fragen</h2>
+    <details><summary>Wie rechne ich Rabatt aus?</summary><p>Rabatt in Prozent mal Originalpreis geteilt durch 100 = gesparter Betrag. Den ziehst du vom Preis ab. 25 % auf 80 € → 20 € Rabatt → 60 € Endpreis.</p></details>
+    <details><summary>Warum ist die Veränderung von 80 auf 100 nicht dasselbe wie von 100 auf 80?</summary><p>Weil sich Prozent immer auf den Ausgangswert bezieht: von 80 auf 100 sind +25 %, von 100 auf 80 aber −20 %. Der Ausgangswert ist die Bezugsgröße.</p></details>
+    <details><summary>Wie viel MwSt steckt in einem Bruttopreis?</summary><p>Bei 19 %: Brutto ÷ 1,19 = Netto; die Differenz ist die enthaltene Steuer. In 119 € brutto stecken 19 € MwSt – nicht 22,61 €, wie man beim „19 % von 119“ fälschlich rechnen würde.</p></details>
+  </section>
+</main>
+
+<footer class="site">
+  <span>Prozentrechner – ein Werkzeug von <a href="../">Nutzwerk24</a></span>
+  <a href="../impressum.html">Impressum</a>
+  <a href="../datenschutz.html">Datenschutz</a>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var nf = new Intl.NumberFormat("de-DE",{maximumFractionDigits:2});
+  var eur = new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR"});
+
+  function num(id){
+    var v = document.getElementById(id).value.trim().replace(",",".");
+    var n = parseFloat(v);
+    return isFinite(n) ? n : null;
+  }
+  function out(id, html, ok){
+    var el = document.getElementById(id);
+    el.innerHTML = html;
+    el.className = "res" + (ok ? " ok" : "");
+  }
+
+  function calcA(){
+    var p = num("aP"), g = num("aG");
+    if(p===null||g===null){ out("aRes","Ergebnis erscheint hier …"); return; }
+    out("aRes","<strong>"+nf.format(g*p/100)+"</strong><span class=\"sub\">"+nf.format(p)+" % von "+nf.format(g)+"</span>", true);
+  }
+  function calcB(){
+    var w = num("bW"), g = num("bG");
+    if(w===null||g===null||g===0){ out("bRes","Ergebnis erscheint hier …"); return; }
+    out("bRes","<strong>"+nf.format(w/g*100)+" %</strong><span class=\"sub\">"+nf.format(w)+" von "+nf.format(g)+"</span>", true);
+  }
+  function calcC(){
+    var a = num("cA"), b = num("cB");
+    if(a===null||b===null||a===0){ out("cRes","Ergebnis erscheint hier …"); return; }
+    var ch = (b-a)/a*100;
+    var sign = ch>0 ? "+" : "";
+    out("cRes","<strong>"+sign+nf.format(ch)+" %</strong><span class=\"sub\">von "+nf.format(a)+" auf "+nf.format(b)+"</span>", true);
+  }
+  function calcD(){
+    var betrag = num("dBetrag");
+    var typ = document.getElementById("dTyp").value;
+    var satz = parseFloat(document.getElementById("dSatz").value);
+    if(betrag===null){ out("dRes","Ergebnis erscheint hier …"); return; }
+    var netto, brutto;
+    if(typ==="brutto"){ brutto = betrag; netto = betrag/(1+satz/100); }
+    else { netto = betrag; brutto = betrag*(1+satz/100); }
+    var mwst = brutto-netto;
+    out("dRes","<strong>"+(typ==="brutto"?eur.format(netto)+" netto":eur.format(brutto)+" brutto")+"</strong><span class=\"sub\">enthaltene MwSt ("+satz+" %): "+eur.format(mwst)+"</span>", true);
+  }
+
+  ["aP","aG"].forEach(function(id){document.getElementById(id).addEventListener("input",calcA);});
+  ["bW","bG"].forEach(function(id){document.getElementById(id).addEventListener("input",calcB);});
+  ["cA","cB"].forEach(function(id){document.getElementById(id).addEventListener("input",calcC);});
+  document.getElementById("dBetrag").addEventListener("input",calcD);
+  document.getElementById("dTyp").addEventListener("change",calcD);
+  document.getElementById("dSatz").addEventListener("change",calcD);
+})();
+</script>
+</body>
+</html>
