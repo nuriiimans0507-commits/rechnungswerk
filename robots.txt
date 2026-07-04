@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nuriiimans0507-commits.github.io/rechnungswerk/sitemap.xml
