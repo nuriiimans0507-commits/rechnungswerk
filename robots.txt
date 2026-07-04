@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nuriiimans0507-commits.github.io/rechnungswerk/sitemap.xml
+Sitemap: https://nutzwerk24.de/sitemap.xml

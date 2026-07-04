@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kleinunternehmer-Rechnung schreiben – kostenloser Rechnungsgenerator (§ 19 UStG)</title>
+<meta name="description" content="Rechnung als Kleinunternehmer kostenlos online erstellen: alle Pflichtangaben nach § 14 UStG, korrekte § 19-Formulierung, sofort als PDF drucken. Ohne Anmeldung, Daten bleiben im Browser.">
+<link rel="canonical" href="https://nutzwerk24.de/rechnung/">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link href="../fonts/fonts.css" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Welche Pflichtangaben braucht eine Kleinunternehmer-Rechnung?","acceptedAnswer":{"@type":"Answer","text":"Vollständiger Name und Anschrift von Rechnungssteller und Empfänger, Steuernummer oder USt-IdNr., Rechnungsdatum, fortlaufende Rechnungsnummer, Menge und Art der Leistung, Leistungsdatum sowie das Entgelt. Als Kleinunternehmer zusätzlich der Hinweis auf § 19 UStG."},
+    {"@type":"Question","name":"Wie lautet die korrekte § 19 UStG Formulierung?","acceptedAnswer":{"@type":"Answer","text":"Üblich ist: „Gemäß § 19 UStG enthält der Rechnungsbetrag keine Umsatzsteuer.“ Der Hinweis ist Pflicht, die genaue Formulierung ist frei wählbar."},
+    {"@type":"Question","name":"Darf ich als Kleinunternehmer Umsatzsteuer ausweisen?","acceptedAnswer":{"@type":"Answer","text":"Nein. Wer als Kleinunternehmer trotzdem Umsatzsteuer ausweist, schuldet diese dem Finanzamt (§ 14c UStG). Deshalb weist dieser Generator grundsätzlich keine Umsatzsteuer aus."},
+    {"@type":"Question","name":"Ist dieser Rechnungsgenerator wirklich kostenlos?","acceptedAnswer":{"@type":"Answer","text":"Ja. Das Tool ist kostenlos, ohne Anmeldung nutzbar und speichert alle Eingaben nur lokal in deinem Browser – es werden keine Daten an einen Server übertragen."}
+  ]
+}
+</script>
+<style>
+  :root{
+    --ink:#23409F;            /* Königsblau – Füllertinte */
+    --ink-dark:#182C6B;
+    --paper:#FDFDFB;
+    --desk:#EDF0F4;           /* Schreibtisch */
+    --text:#16202E;
+    --muted:#5B6B7E;
+    --line:#D4DAE3;
+    --ok:#1E7F4F;
+    --warn:#B54708;
+    --radius:10px;
+    --font-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --font-num:"IBM Plex Mono","Consolas",monospace;
+    --font-doc:Arial,Helvetica,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-ui);background:var(--desk);color:var(--text);line-height:1.55}
+  a{color:var(--ink)}
+  :focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
+
+  /* ---------- Kopf ---------- */
+  header.site{background:var(--paper);border-bottom:2px solid var(--ink);padding:14px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .wordmark{font-weight:700;font-size:1.05rem;letter-spacing:.02em;color:var(--ink-dark);text-decoration:none;display:flex;align-items:center;gap:9px}
+  .wordmark .mark{width:26px;height:26px;border:2.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-family:var(--font-num);font-size:.72rem;font-weight:600;color:var(--ink)}
+  header.site .claim{color:var(--muted);font-size:.88rem}
+  main{max-width:1240px;margin:0 auto;padding:28px 20px 60px}
+
+  .intro{max-width:760px;margin:6px auto 26px;text-align:center}
+  .intro h1{font-size:clamp(1.5rem,3.4vw,2.15rem);line-height:1.2;color:var(--ink-dark);font-weight:700}
+  .intro h1 em{font-style:normal;border-bottom:4px solid var(--ink);padding-bottom:2px}
+  .intro p{margin-top:10px;color:var(--muted);font-size:1.02rem}
+
+  /* ---------- Werkbank ---------- */
+  .bench{display:grid;grid-template-columns:minmax(340px,470px) 1fr;gap:26px;align-items:start}
+  @media (max-width:960px){.bench{grid-template-columns:1fr}}
+
+  form.tool{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  fieldset{border:0;padding:0;margin:0 0 20px}
+  legend{font-weight:600;color:var(--ink-dark);font-size:.98rem;padding:0 0 8px;display:flex;align-items:center;gap:8px}
+  legend .paragraf{font-family:var(--font-num);font-size:.72rem;color:var(--muted);font-weight:400}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .grid2 .full{grid-column:1/-1}
+  label{display:block;font-size:.82rem;color:var(--muted);margin:0 0 3px}
+  input[type=text],input[type=date],input[type=email],textarea{
+    width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;
+    font:inherit;font-size:.95rem;background:#fff;color:var(--text)
+  }
+  input:focus,textarea:focus{border-color:var(--ink)}
+  .hint{font-size:.76rem;color:var(--muted);margin-top:3px}
+  .field{margin-bottom:10px}
+
+  /* Positionen */
+  .pos-row{display:grid;grid-template-columns:1fr 64px 74px 96px 30px;gap:8px;margin-bottom:8px;align-items:start}
+  .pos-row input{font-size:.9rem}
+  .pos-row .num{font-family:var(--font-num);text-align:right}
+  .pos-head{display:grid;grid-template-columns:1fr 64px 74px 96px 30px;gap:8px;font-size:.72rem;color:var(--muted);margin-bottom:4px}
+  .btn-del{border:0;background:none;color:var(--muted);cursor:pointer;font-size:1.05rem;padding:8px 4px;line-height:1}
+  .btn-del:hover{color:#B4231F}
+  .btn-add{border:1.5px dashed var(--line);background:none;border-radius:6px;width:100%;padding:9px;color:var(--ink);font:inherit;font-size:.9rem;font-weight:500;cursor:pointer}
+  .btn-add:hover{border-color:var(--ink);background:#F5F7FC}
+
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+  .btn{border:0;border-radius:7px;padding:12px 18px;font:inherit;font-weight:600;cursor:pointer}
+  .btn-print{background:var(--ink);color:#fff;flex:1;min-width:200px;font-size:1rem}
+  .btn-print:hover{background:var(--ink-dark)}
+  .btn-ghost{background:none;color:var(--muted);border:1px solid var(--line)}
+  .btn-ghost:hover{color:#B4231F;border-color:#B4231F}
+
+  /* Pflichtangaben-Check */
+  .check{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-top:16px}
+  .check h2{font-size:.95rem;color:var(--ink-dark);margin-bottom:10px}
+  .check ul{list-style:none}
+  .check li{display:flex;gap:9px;align-items:baseline;font-size:.86rem;padding:3px 0;color:var(--muted)}
+  .check li .dot{font-family:var(--font-num);width:18px;flex:none;color:var(--line)}
+  .check li.ok{color:var(--text)}
+  .check li.ok .dot{color:var(--ok)}
+  .check .score{font-family:var(--font-num);font-size:.8rem;color:var(--muted);margin-top:8px}
+  .check .score strong{color:var(--ok)}
+
+  /* ---------- Vorschau ---------- */
+  .preview-col{position:sticky;top:18px}
+  @media (max-width:960px){.preview-col{position:static}}
+  .preview-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .preview-bar h2{font-size:.9rem;color:var(--muted);font-weight:500}
+  .preview-bar .live{width:8px;height:8px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  @media (prefers-reduced-motion:reduce){.preview-bar .live{animation:none}}
+
+  .sheet-wrap{position:relative}
+  .sheet-scale{transform-origin:top left}
+  .sheet{
+    font-family:var(--font-doc);width:210mm;min-height:297mm;background:#fff;
+    box-shadow:0 2px 6px rgba(22,32,46,.14),0 14px 34px rgba(22,32,46,.12);
+    padding:20mm 20mm 18mm;color:#111;font-size:10.5pt;line-height:1.45;position:relative
+  }
+  .sheet .s-head{display:flex;justify-content:space-between;gap:10mm;margin-bottom:14mm}
+  .sheet .s-sender-big{font-size:13pt;font-weight:bold}
+  .sheet .s-sender-line{font-size:7.5pt;color:#555;border-bottom:.4pt solid #999;padding-bottom:1mm;margin-bottom:2mm}
+  .sheet .s-meta{font-size:9.5pt;text-align:right;color:#333}
+  .sheet .s-meta table{border-collapse:collapse;margin-left:auto}
+  .sheet .s-meta td{padding:.4mm 0 .4mm 6mm;text-align:right}
+  .sheet .s-meta td:first-child{color:#666;text-align:left;padding-left:0}
+  .sheet h3.s-title{font-size:14pt;margin:0 0 5mm}
+  .sheet table.s-pos{width:100%;border-collapse:collapse;margin-bottom:6mm}
+  .sheet table.s-pos th{font-size:8.5pt;text-transform:uppercase;letter-spacing:.04em;color:#555;text-align:left;border-bottom:1pt solid #111;padding:1.5mm 2mm}
+  .sheet table.s-pos td{padding:2mm;border-bottom:.4pt solid #ccc;vertical-align:top}
+  .sheet table.s-pos .r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .sheet .s-total td{border-bottom:0;border-top:1.6pt solid #111;font-weight:bold;font-size:11.5pt;padding-top:2.5mm}
+  .sheet .s-klausel{margin:4mm 0 6mm;font-size:9.5pt}
+  .sheet .s-zahlung{margin-bottom:8mm}
+  .sheet .s-schluss{margin-bottom:10mm}
+  .sheet .s-foot{position:absolute;left:20mm;right:20mm;bottom:12mm;border-top:.4pt solid #999;padding-top:2mm;font-size:7.5pt;color:#555;display:flex;justify-content:space-between;gap:6mm;flex-wrap:wrap}
+  .sheet .placeholder{color:#96A3B4}
+
+  /* §19-Stempel (nur Deko, wird nicht gedruckt) */
+  .stamp{position:absolute;top:-22px;right:-14px;width:118px;height:118px;transform:rotate(9deg);pointer-events:none;filter:drop-shadow(0 1px 1px rgba(24,44,107,.25));opacity:.92}
+  @media (max-width:1100px){.stamp{width:96px;height:96px;top:-16px;right:-8px}}
+  .stamp-note{font-size:.74rem;color:var(--muted);margin-top:8px;text-align:right}
+
+  /* ---------- Wissensteil ---------- */
+  .know{max-width:820px;margin:56px auto 0}
+  .know h2{color:var(--ink-dark);font-size:1.3rem;margin:34px 0 12px}
+  .know p{margin-bottom:12px}
+  .know ol.pflicht{list-style:none;counter-reset:p;margin:14px 0}
+  .know ol.pflicht li{counter-increment:p;display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);align-items:baseline}
+  .know ol.pflicht li::before{content:"§ " counter(p);font-family:var(--font-num);font-size:.78rem;color:var(--ink);flex:none;width:38px}
+  details{border:1px solid var(--line);border-radius:8px;background:var(--paper);margin-bottom:9px}
+  summary{padding:13px 16px;font-weight:600;cursor:pointer;color:var(--ink-dark)}
+  details p{padding:0 16px 14px;color:var(--text)}
+  .affil{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:var(--radius);padding:18px 20px;margin:34px 0}
+  .affil h2{margin-top:0;font-size:1.05rem}
+  .affil a.btn-affil{display:inline-block;margin-top:10px;background:var(--ink);color:#fff;text-decoration:none;padding:10px 16px;border-radius:7px;font-weight:600}
+  footer.site{border-top:1px solid var(--line);color:var(--muted);font-size:.84rem;padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap;justify-content:center;background:var(--paper);margin-top:40px}
+  footer.site a{color:var(--muted)}
+
+  /* ---------- Druck: nur das Blatt ---------- */
+  @media print{
+    @page{size:A4;margin:0}
+    body{background:#fff}
+    header.site,.intro,form.tool,.check,.preview-bar,.stamp,.stamp-note,.know,.affil,footer.site{display:none!important}
+    main{max-width:none;padding:0;margin:0}
+    .bench{display:block}
+    .preview-col{position:static}
+    .sheet-scale{transform:none!important;width:auto!important;height:auto!important}
+    .sheet{box-shadow:none;width:auto;min-height:auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <a class="wordmark" href="../"><span class="mark">§19</span>Rechnungswerk</a>
+  <span class="claim">Rechnungen für Kleinunternehmer – kostenlos, ohne Anmeldung, Daten bleiben bei dir. Ein Werkzeug von <a href="../">Nutzwerk24</a>.</span>
+</header>
+
+<main>
+  <div class="intro">
+    <h1>Kleinunternehmer-Rechnung schreiben – <em>korrekt nach § 19 UStG</em></h1>
+    <p>Links ausfüllen, rechts entsteht deine Rechnung. Mit allen Pflichtangaben nach § 14 UStG und dem richtigen Umsatzsteuer-Hinweis. Am Ende: drucken oder als PDF speichern.</p>
+  </div>
+
+  <div class="bench">
+    <div>
+      <form class="tool" id="form" autocomplete="on">
+        <fieldset>
+          <legend>Deine Angaben <span class="paragraf">Rechnungssteller</span></legend>
+          <div class="grid2">
+            <div class="field full"><label for="sName">Name / Firma</label><input type="text" id="sName" data-k placeholder="Max Mustermann"></div>
+            <div class="field full"><label for="sStr">Straße und Hausnummer</label><input type="text" id="sStr" data-k placeholder="Beispielweg 12"></div>
+            <div class="field"><label for="sPlz">PLZ</label><input type="text" id="sPlz" data-k placeholder="12345" inputmode="numeric"></div>
+            <div class="field"><label for="sOrt">Ort</label><input type="text" id="sOrt" data-k placeholder="Berlin"></div>
+            <div class="field full"><label for="sStnr">Steuernummer oder USt-IdNr.</label><input type="text" id="sStnr" data-k placeholder="12/345/67890">
+              <div class="hint">Eine von beiden ist Pflicht (§ 14 UStG). Die Steuernummer bekommst du vom Finanzamt.</div></div>
+            <div class="field"><label for="sMail">E-Mail (optional)</label><input type="email" id="sMail" data-k placeholder="mail@beispiel.de"></div>
+            <div class="field"><label for="sTel">Telefon (optional)</label><input type="text" id="sTel" data-k placeholder="0151 2345678"></div>
+            <div class="field full"><label for="sIban">IBAN (für die Fußzeile)</label><input type="text" id="sIban" data-k placeholder="DE12 3456 7890 1234 5678 90"></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Rechnungsempfänger</legend>
+          <div class="grid2">
+            <div class="field full"><label for="rName">Name / Firma</label><input type="text" id="rName" data-k placeholder="Kundin GmbH"></div>
+            <div class="field full"><label for="rStr">Straße und Hausnummer</label><input type="text" id="rStr" data-k placeholder="Kundenstraße 1"></div>
+            <div class="field"><label for="rPlz">PLZ</label><input type="text" id="rPlz" data-k placeholder="54321" inputmode="numeric"></div>
+            <div class="field"><label for="rOrt">Ort</label><input type="text" id="rOrt" data-k placeholder="Hamburg"></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Rechnungsdaten</legend>
+          <div class="grid2">
+            <div class="field"><label for="mNr">Rechnungsnummer</label><input type="text" id="mNr" data-k placeholder="2026-001">
+              <div class="hint">Muss fortlaufend und einmalig sein.</div></div>
+            <div class="field"><label for="mDatum">Rechnungsdatum</label><input type="date" id="mDatum" data-k></div>
+            <div class="field full"><label for="mLeistung">Leistungsdatum oder -zeitraum (optional)</label><input type="text" id="mLeistung" data-k placeholder="z. B. 15.06.2026 oder Juni 2026">
+              <div class="hint">Leer lassen = „Leistungsdatum entspricht Rechnungsdatum“ erscheint automatisch.</div></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Positionen</legend>
+          <div class="pos-head"><span>Bezeichnung</span><span>Menge</span><span>Einheit</span><span>Einzelpreis €</span><span></span></div>
+          <div id="posList"></div>
+          <button type="button" class="btn-add" id="addPos">+ Position hinzufügen</button>
+        </fieldset>
+
+        <fieldset>
+          <legend>Zahlung &amp; Schluss</legend>
+          <div class="grid2">
+            <div class="field"><label for="mZiel">Zahlungsziel (Tage)</label><input type="text" id="mZiel" data-k value="14" inputmode="numeric"></div>
+            <div class="field full"><label for="mSchluss">Schlusstext (optional)</label><textarea id="mSchluss" data-k rows="2" placeholder="Vielen Dank für Ihren Auftrag!"></textarea></div>
+          </div>
+        </fieldset>
+
+        <div class="toolbar">
+          <button type="button" class="btn btn-print" id="btnPrint">Drucken / als PDF speichern</button>
+          <button type="button" class="btn btn-ghost" id="btnReset">Alle Daten löschen</button>
+        </div>
+        <p class="hint" style="margin-top:8px">Deine Eingaben werden nur lokal in diesem Browser gespeichert – nichts verlässt deinen Rechner.</p>
+      </form>
+
+      <aside class="check" aria-live="polite">
+        <h2>Pflichtangaben-Check (§ 14 UStG)</h2>
+        <ul id="checkList"></ul>
+        <p class="score" id="checkScore"></p>
+      </aside>
+    </div>
+
+    <div class="preview-col">
+      <div class="preview-bar"><span class="live" aria-hidden="true"></span><h2>Live-Vorschau deiner Rechnung</h2></div>
+      <div class="sheet-wrap">
+        <svg class="stamp" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="56" fill="none" stroke="#23409F" stroke-width="3"/>
+          <circle cx="60" cy="60" r="40" fill="none" stroke="#23409F" stroke-width="1.6"/>
+          <path id="stampArc" d="M 60,60 m -48,0 a 48,48 0 1,1 96,0 a 48,48 0 1,1 -96,0" fill="none"/>
+          <text font-family="IBM Plex Mono,monospace" font-size="10.5" font-weight="600" fill="#23409F" letter-spacing="2.5">
+            <textPath href="#stampArc">KLEINUNTERNEHMER · § 19 UStG · KLEINUNTERNEHMER ·</textPath>
+          </text>
+          <text x="60" y="56" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" font-weight="600" fill="#23409F">OHNE</text>
+          <text x="60" y="69" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" font-weight="600" fill="#23409F">UMSATZSTEUER</text>
+        </svg>
+        <div class="sheet-scale" id="sheetScale">
+          <div class="sheet" id="sheet"></div>
+        </div>
+      </div>
+      <p class="stamp-note">Der Stempel ist nur Deko – gedruckt wird er nicht.</p>
+    </div>
+  </div>
+
+  <section class="know">
+    <h2>Pflichtangaben: Das muss auf jede Kleinunternehmer-Rechnung</h2>
+    <p>Auch als Kleinunternehmer gilt § 14 UStG. Diese Angaben prüft der Generator automatisch mit:</p>
+    <ol class="pflicht">
+      <li>Vollständiger Name und Anschrift von dir und deinem Kunden</li>
+      <li>Deine Steuernummer oder Umsatzsteuer-Identifikationsnummer</li>
+      <li>Rechnungsdatum</li>
+      <li>Fortlaufende, einmalige Rechnungsnummer</li>
+      <li>Menge und Art der gelieferten Leistung oder Ware</li>
+      <li>Zeitpunkt der Lieferung oder Leistung</li>
+      <li>Das Entgelt (bei dir: ohne Umsatzsteuer)</li>
+      <li>Hinweis auf die Steuerbefreiung nach § 19 UStG</li>
+    </ol>
+
+    <h2>Häufige Fragen</h2>
+    <details><summary>Wie lautet die korrekte § 19-Formulierung?</summary><p>Üblich und sicher: <strong>„Gemäß § 19 UStG enthält der Rechnungsbetrag keine Umsatzsteuer.“</strong> Die genaue Formulierung ist frei, der Hinweis selbst ist Pflicht. Dieser Generator setzt ihn automatisch auf jede Rechnung.</p></details>
+    <details><summary>Darf ich trotzdem Umsatzsteuer ausweisen?</summary><p>Nein. Weist du als Kleinunternehmer Umsatzsteuer aus, schuldest du sie dem Finanzamt (§ 14c UStG) – dein Kunde kann sie aber nicht als Vorsteuer ziehen. Deshalb gibt es hier bewusst kein Umsatzsteuer-Feld.</p></details>
+    <details><summary>Was zählt als fortlaufende Rechnungsnummer?</summary><p>Jede Nummer darf nur einmal vorkommen und muss einem nachvollziehbaren System folgen, z. B. <span style="font-family:var(--font-num)">2026-001, 2026-002 …</span> Lücken sind erlaubt, Dubletten nicht.</p></details>
+    <details><summary>Wo bleiben meine Daten?</summary><p>Im Browser. Das Tool hat keinen Server und überträgt nichts. Deine Eingaben liegen im lokalen Speicher deines Geräts und lassen sich mit „Alle Daten löschen“ jederzeit entfernen.</p></details>
+    <details><summary>Muss ich meine Rechnungen aufbewahren?</summary><p>Ja, grundsätzlich 8 Jahre (seit 2025; vorher 10). Speichere die PDF also gut ab – z. B. in einem Ordner pro Jahr.</p></details>
+
+    <div class="affil">
+      <h2>Wenn es mehr als ein paar Rechnungen im Monat werden</h2>
+      <p>Ab einer gewissen Menge lohnt sich echte Buchhaltungssoftware: automatische Rechnungsnummern, Kundenverwaltung, EÜR und Steuerberater-Export. Bekannte Anbieter für Kleinunternehmer sind z. B. sevDesk oder lexoffice – beide mit Testphase.</p>
+      <!-- TODO: Link durch Affiliate-Link ersetzen, sobald Partnerprogramm-Zugang da ist -->
+      <a class="btn-affil" href="https://sevdesk.de" rel="nofollow sponsored" target="_blank">Buchhaltungssoftware ansehen&nbsp;→</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <span>Rechnungswerk – ein Werkzeug von <a href="../">Nutzwerk24</a></span>
+  <a href="../impressum.html">Impressum</a>
+  <a href="../datenschutz.html">Datenschutz</a>
+  <span>Keine Rechts- oder Steuerberatung.</span>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var LS_KEY = "rechnungswerk_v1";
+  var euro = new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR"});
+  var posList = document.getElementById("posList");
+  var sheet = document.getElementById("sheet");
+
+  /* ---------- Positionen ---------- */
+  function addPos(data){
+    data = data || {};
+    var row = document.createElement("div");
+    row.className = "pos-row";
+    row.innerHTML =
+      '<input type="text" class="p-desc" placeholder="Webdesign, Logo, Beratung …" value="">' +
+      '<input type="text" class="p-qty num" inputmode="decimal" value="">' +
+      '<input type="text" class="p-unit" value="">' +
+      '<input type="text" class="p-price num" inputmode="decimal" placeholder="0,00" value="">' +
+      '<button type="button" class="btn-del" title="Position entfernen" aria-label="Position entfernen">✕</button>';
+    row.querySelector(".p-desc").value = data.desc || "";
+    row.querySelector(".p-qty").value = data.qty != null ? data.qty : "1";
+    row.querySelector(".p-unit").value = data.unit != null ? data.unit : "Stk.";
+    row.querySelector(".p-price").value = data.price || "";
+    row.querySelector(".btn-del").addEventListener("click", function(){
+      if (posList.children.length > 1){ row.remove(); update(); }
+      else { row.querySelector(".p-desc").value=""; row.querySelector(".p-price").value=""; update(); }
+    });
+    posList.appendChild(row);
+  }
+  document.getElementById("addPos").addEventListener("click", function(){ addPos(); update(); });
+
+  function parseNum(s){
+    s = String(s||"").trim().replace(/\./g,"").replace(",",".");
+    var n = parseFloat(s);
+    return isFinite(n) ? n : 0;
+  }
+  function getPositions(){
+    var out = [];
+    posList.querySelectorAll(".pos-row").forEach(function(r){
+      out.push({
+        desc: r.querySelector(".p-desc").value.trim(),
+        qty:  r.querySelector(".p-qty").value.trim(),
+        unit: r.querySelector(".p-unit").value.trim(),
+        price:r.querySelector(".p-price").value.trim()
+      });
+    });
+    return out;
+  }
+
+  /* ---------- Daten sammeln ---------- */
+  var fields = ["sName","sStr","sPlz","sOrt","sStnr","sMail","sTel","sIban","rName","rStr","rPlz","rOrt","mNr","mDatum","mLeistung","mZiel","mSchluss"];
+  function getData(){
+    var d = {};
+    fields.forEach(function(id){ d[id] = document.getElementById(id).value; });
+    d.pos = getPositions();
+    return d;
+  }
+
+  function fmtDate(iso){
+    if(!iso) return "";
+    var p = iso.split("-");
+    return p.length===3 ? p[2]+"."+p[1]+"."+p[0] : iso;
+  }
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+    });
+  }
+  function or(v, ph){
+    return v ? esc(v) : '<span class="placeholder">'+ph+'</span>';
+  }
+
+  /* ---------- Vorschau rendern ---------- */
+  function render(d){
+    var senderLine = [d.sName, d.sStr, (d.sPlz+" "+d.sOrt).trim()].filter(Boolean).join(" · ");
+    var rows = "", sum = 0, hasPos = false;
+    d.pos.forEach(function(p){
+      if(!p.desc && !parseNum(p.price)) return;
+      var qty = parseNum(p.qty)||1, price = parseNum(p.price), total = qty*price;
+      sum += total; hasPos = hasPos || (!!p.desc && price>0);
+      rows += "<tr><td>"+or(p.desc,"Bezeichnung")+"</td><td class='r'>"+qty+" "+esc(p.unit||"")+"</td><td class='r'>"+euro.format(price)+"</td><td class='r'>"+euro.format(total)+"</td></tr>";
+    });
+    if(!rows) rows = "<tr><td colspan='4'><span class='placeholder'>Noch keine Positionen – links ausfüllen.</span></td></tr>";
+
+    var leistung = d.mLeistung ? "Leistungsdatum/-zeitraum: "+esc(d.mLeistung) : "Leistungsdatum entspricht Rechnungsdatum.";
+    var zielTage = parseInt(d.mZiel,10);
+    var zahlung = "Bitte überweisen Sie den Betrag" + (isFinite(zielTage) && zielTage>0 ? " innerhalb von "+zielTage+" Tagen" : "") + " auf das unten angegebene Konto.";
+
+    sheet.innerHTML =
+      '<div class="s-head">' +
+        '<div style="max-width:95mm">' +
+          '<div class="s-sender-line">'+ (senderLine ? esc(senderLine) : '<span class="placeholder">Dein Name · Straße · Ort</span>') +'</div>' +
+          '<div style="margin-top:6mm">'+ or(d.rName,"Name des Kunden") +'<br>'+ or(d.rStr,"Straße des Kunden") +'<br>'+ or((d.rPlz+" "+d.rOrt).trim(),"PLZ Ort") +'</div>' +
+        '</div>' +
+        '<div class="s-meta">' +
+          '<div class="s-sender-big">'+ or(d.sName,"Dein Name") +'</div>' +
+          '<table>' +
+            '<tr><td>Rechnungsnr.</td><td>'+ or(d.mNr,"—") +'</td></tr>' +
+            '<tr><td>Datum</td><td>'+ or(fmtDate(d.mDatum),"—") +'</td></tr>' +
+            '<tr><td>Steuernr./USt-IdNr.</td><td>'+ or(d.sStnr,"—") +'</td></tr>' +
+          '</table>' +
+        '</div>' +
+      '</div>' +
+      '<h3 class="s-title">Rechnung</h3>' +
+      '<p style="margin-bottom:4mm;font-size:9.5pt">'+ leistung +'</p>' +
+      '<table class="s-pos">' +
+        '<thead><tr><th>Bezeichnung</th><th class="r">Menge</th><th class="r">Einzelpreis</th><th class="r">Gesamt</th></tr></thead>' +
+        '<tbody>'+ rows +
+        '<tr class="s-total"><td colspan="3">Rechnungsbetrag</td><td class="r">'+ euro.format(sum) +'</td></tr></tbody>' +
+      '</table>' +
+      '<p class="s-klausel"><strong>Gemäß § 19 UStG enthält der Rechnungsbetrag keine Umsatzsteuer.</strong></p>' +
+      '<p class="s-zahlung">'+ zahlung +'</p>' +
+      (d.mSchluss ? '<p class="s-schluss">'+esc(d.mSchluss)+'</p>' : '') +
+      '<div class="s-foot">' +
+        '<span>'+ or(d.sName,"Name") + (d.sTel ? " · Tel. "+esc(d.sTel) : "") + (d.sMail ? " · "+esc(d.sMail) : "") +'</span>' +
+        '<span>'+ (d.sIban ? "IBAN: "+esc(d.sIban) : '<span class="placeholder">IBAN eintragen</span>') +'</span>' +
+      '</div>';
+    return {sum:sum, hasPos:hasPos};
+  }
+
+  /* ---------- Pflichtangaben-Check ---------- */
+  var checkList = document.getElementById("checkList");
+  var checkScore = document.getElementById("checkScore");
+  function renderCheck(d, hasPos){
+    var items = [
+      ["Dein Name und Anschrift", !!(d.sName && d.sStr && d.sPlz && d.sOrt)],
+      ["Name und Anschrift des Empfängers", !!(d.rName && d.rStr && d.rPlz && d.rOrt)],
+      ["Steuernummer oder USt-IdNr.", !!d.sStnr],
+      ["Rechnungsdatum", !!d.mDatum],
+      ["Fortlaufende Rechnungsnummer", !!d.mNr],
+      ["Leistungsdatum (oder Automatik-Hinweis)", true],
+      ["Mindestens eine Position mit Preis", hasPos],
+      ["§ 19-Hinweis auf der Rechnung", true]
+    ];
+    var okCount = 0;
+    checkList.innerHTML = items.map(function(it){
+      if(it[1]) okCount++;
+      return '<li class="'+(it[1]?"ok":"")+'"><span class="dot">'+(it[1]?"✓":"○")+'</span>'+it[0]+'</li>';
+    }).join("");
+    checkScore.innerHTML = okCount === items.length
+      ? '<strong>✓ Vollständig</strong> – deine Rechnung enthält alle Pflichtangaben.'
+      : okCount + " von " + items.length + " Pflichtangaben erfüllt.";
+  }
+
+  /* ---------- Skalierung ---------- */
+  var scaleBox = document.getElementById("sheetScale");
+  function rescale(){
+    var wrap = scaleBox.parentElement;
+    var w = wrap.clientWidth;
+    var sheetW = sheet.offsetWidth;
+    if(!sheetW) return;
+    var s = Math.min(1, w / sheetW);
+    scaleBox.style.transform = "scale("+s+")";
+    scaleBox.style.width = sheetW+"px";
+    wrap.style.height = (sheet.offsetHeight * s)+"px";
+  }
+  window.addEventListener("resize", rescale);
+
+  /* ---------- Speichern / Laden ---------- */
+  function save(d){ try{ localStorage.setItem(LS_KEY, JSON.stringify(d)); }catch(e){} }
+  function load(){
+    try{
+      var raw = localStorage.getItem(LS_KEY);
+      if(!raw) return null;
+      return JSON.parse(raw);
+    }catch(e){ return null; }
+  }
+
+  function update(){
+    var d = getData();
+    var res = render(d);
+    renderCheck(d, res.hasPos);
+    save(d);
+    rescale();
+  }
+
+  document.getElementById("form").addEventListener("input", update);
+  document.getElementById("btnPrint").addEventListener("click", function(){ window.print(); });
+  document.getElementById("btnReset").addEventListener("click", function(){
+    if(confirm("Wirklich alle Eingaben löschen?")){
+      try{ localStorage.removeItem(LS_KEY); }catch(e){}
+      location.reload();
+    }
+  });
+
+  /* ---------- Init ---------- */
+  var saved = load();
+  if(saved && saved.pos && saved.pos.length){
+    fields.forEach(function(id){ if(saved[id]!=null) document.getElementById(id).value = saved[id]; });
+    saved.pos.forEach(function(p){ addPos(p); });
+  } else {
+    addPos();
+    var t = new Date();
+    document.getElementById("mDatum").value = t.toISOString().slice(0,10);
+    document.getElementById("mNr").value = t.getFullYear()+"-001";
+  }
+  update();
+  window.addEventListener("load", rescale);
+})();
+</script>
+</body>
+</html>
