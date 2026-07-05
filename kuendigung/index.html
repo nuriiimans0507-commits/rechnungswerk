@@ -203,6 +203,15 @@
   </div>
 
   <section class="know">
+    <h2>Kündigung nach Vertragsart</h2>
+    <p>Konkrete Anleitungen mit Frist, Form und Sonderkündigungsrecht für den jeweiligen Vertrag:</p>
+    <ul style="margin:0 0 8px 20px">
+      <li><a href="fitnessstudio/">Fitnessstudio kündigen – Vorlage &amp; Frist</a></li>
+      <li><a href="handyvertrag/">Handyvertrag kündigen – Vorlage &amp; Frist</a></li>
+      <li><a href="arbeitsvertrag/">Arbeitsvertrag kündigen (Arbeitnehmer)</a></li>
+      <li><a href="mietvertrag/">Mietvertrag kündigen (Mieter)</a></li>
+    </ul>
+
     <h2>Kündigen: die 3 Regeln, die wirklich zählen</h2>
     <p><strong>1. Form:</strong> Bei fast allen Verbraucherverträgen (Handy, Streaming, Fitness, Strom) reicht seit 2022 die Textform – E-Mail genügt. Nur Arbeits- und Mietverträge brauchen Papier + Unterschrift.</p>
     <p><strong>2. Frist:</strong> Kennst du die Frist nicht? „Zum nächstmöglichen Zeitpunkt“ kündigt immer wirksam – der Anbieter muss das korrekte Vertragsende selbst berechnen.</p>
@@ -305,6 +314,16 @@
     fields.forEach(function(id){var el=document.getElementById(id);if(el&&saved[id]!=null)el.value=saved[id];});
     checks.forEach(function(id){if(saved[id]!=null)document.getElementById(id).checked=saved[id];});
   }
+  // Vertragsart per URL-Parameter vorwählen (von den Landingpages)
+  try{
+    var vParam=new URLSearchParams(location.search).get("vertrag");
+    if(vParam){
+      var sel=document.getElementById("vArt");
+      for(var i=0;i<sel.options.length;i++){
+        if(sel.options[i].text.toLowerCase().indexOf(vParam.toLowerCase())>-1){ sel.selectedIndex=i; break; }
+      }
+    }
+  }catch(e){}
   render();
   window.addEventListener("load",rescale);
 })();
