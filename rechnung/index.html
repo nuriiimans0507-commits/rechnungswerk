@@ -57,6 +57,7 @@
 
   /* ---------- Werkbank ---------- */
   .bench{display:grid;grid-template-columns:minmax(340px,470px) 1fr;gap:26px;align-items:start}
+  .bench > *{min-width:0}
   @media (max-width:960px){.bench{grid-template-columns:1fr}}
 
   form.tool{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
@@ -111,7 +112,7 @@
   @keyframes pulse{50%{opacity:.35}}
   @media (prefers-reduced-motion:reduce){.preview-bar .live{animation:none}}
 
-  .sheet-wrap{position:relative}
+  .sheet-wrap{position:relative;overflow:hidden;width:100%}
   .sheet-scale{transform-origin:top left}
   .sheet{
     font-family:var(--font-doc);width:210mm;min-height:297mm;background:#fff;
@@ -138,8 +139,8 @@
   .sheet .placeholder{color:#96A3B4}
 
   /* §19-Stempel (nur Deko, wird nicht gedruckt) */
-  .stamp{position:absolute;top:-22px;right:-14px;width:118px;height:118px;transform:rotate(9deg);pointer-events:none;filter:drop-shadow(0 1px 1px rgba(24,44,107,.25));opacity:.92}
-  @media (max-width:1100px){.stamp{width:96px;height:96px;top:-16px;right:-8px}}
+  .stamp{position:absolute;top:12px;right:12px;width:118px;height:118px;transform:rotate(9deg);pointer-events:none;filter:drop-shadow(0 1px 1px rgba(24,44,107,.25));opacity:.92}
+  @media (max-width:1100px){.stamp{width:96px;height:96px;top:8px;right:8px}}
   .stamp-note{font-size:.74rem;color:var(--muted);margin-top:8px;text-align:right}
 
   /* ---------- Wissensteil ---------- */
@@ -157,6 +158,25 @@
   .affil a.btn-affil{display:inline-block;margin-top:10px;background:var(--ink);color:#fff;text-decoration:none;padding:10px 16px;border-radius:7px;font-weight:600}
   footer.site{border-top:1px solid var(--line);color:var(--muted);font-size:.84rem;padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap;justify-content:center;background:var(--paper);margin-top:40px}
   footer.site a{color:var(--muted)}
+
+  /* ---------- Mobil ---------- */
+  @media (max-width:600px){
+    body{overflow-x:hidden}
+    header.site{padding:12px 16px;gap:8px}
+    header.site .claim{font-size:.78rem}
+    main{padding:18px 12px 48px}
+    .intro p{font-size:.94rem}
+    form.tool{padding:16px 14px}
+    .grid2{grid-template-columns:1fr}
+    input[type=text],input[type=date],textarea{font-size:16px}
+    .pos-head{display:none}
+    .pos-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.3fr) 38px;gap:6px}
+    .pos-row .p-desc{grid-column:1/-1}
+    .toolbar{flex-direction:column}
+    .btn{width:100%}
+    .stamp{width:72px;height:72px;top:6px;right:6px}
+    .preview-bar{margin-top:6px}
+  }
 
   /* ---------- Druck: nur das Blatt ---------- */
   @media print{
