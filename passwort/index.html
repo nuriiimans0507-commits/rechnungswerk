@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Passwort-Generator – sichere Passwörter erstellen (kostenlos, lokal)</title>
+<meta name="description" content="Sichere Passwörter generieren: Länge und Zeichen wählen, Passwort mit einem Klick kopieren. Läuft komplett in deinem Browser – nichts wird übertragen oder gespeichert.">
+<link rel="canonical" href="https://nutzwerk24.de/passwort/">
+<meta property="og:title" content="Passwort-Generator – sichere Passwörter, lokal erzeugt">
+<meta property="og:description" content="Kryptografisch sichere Passwörter direkt im Browser – nichts wird übertragen.">
+<meta property="og:image" content="https://nutzwerk24.de/og-image.png">
+<meta property="og:url" content="https://nutzwerk24.de/passwort/">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link href="../fonts/fonts.css" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Ist dieser Passwort-Generator sicher?","acceptedAnswer":{"@type":"Answer","text":"Ja. Die Passwörter werden mit der kryptografischen Zufallsfunktion deines Browsers (crypto.getRandomValues) direkt auf deinem Gerät erzeugt. Nichts wird übertragen, gespeichert oder protokolliert."}},
+{"@type":"Question","name":"Wie lang sollte ein sicheres Passwort sein?","acceptedAnswer":{"@type":"Answer","text":"Empfohlen sind mindestens 12 Zeichen, besser 16 oder mehr, mit einer Mischung aus Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen. Wichtiger als Komplexität ist: für jeden Dienst ein eigenes Passwort."}},
+{"@type":"Question","name":"Wo speichere ich meine Passwörter am besten?","acceptedAnswer":{"@type":"Answer","text":"In einem Passwort-Manager. Er merkt sich alle Passwörter verschlüsselt, du brauchst nur noch ein Master-Passwort. Browser-eigene Passwort-Speicher sind besser als Wiederverwendung, ein dedizierter Manager ist ideal."}}
+]}
+</script>
+<style>
+  :root{--ink:#23409F;--ink-dark:#182C6B;--paper:#FDFDFB;--desk:#EDF0F4;--text:#16202E;--muted:#5B6B7E;--line:#D4DAE3;--win:#1E7F4F;--warn:#B54708;--bad:#C0392B;--radius:10px;
+    --font-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--font-num:"IBM Plex Mono","Consolas",monospace}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-ui);background:var(--desk);color:var(--text);line-height:1.55}
+  a{color:var(--ink)}
+  :focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
+  header.site{background:var(--paper);border-bottom:2px solid var(--ink);padding:14px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .wordmark{font-weight:700;font-size:1.05rem;color:var(--ink-dark);text-decoration:none;display:flex;align-items:center;gap:9px}
+  .wordmark .mark{width:26px;height:26px;background:var(--ink);border-radius:7px;display:grid;place-items:center;font-family:var(--font-num);font-size:.8rem;font-weight:600;color:#fff}
+  header.site .claim{color:var(--muted);font-size:.88rem}
+  main{max-width:640px;margin:0 auto;padding:28px 20px 60px}
+  .crumb{font-size:.82rem;color:var(--muted);margin-bottom:14px}
+  .crumb a{color:var(--muted)}
+  .intro{text-align:center;margin-bottom:26px}
+  .intro h1{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.2;color:var(--ink-dark)}
+  .intro h1 em{font-style:normal;border-bottom:4px solid var(--ink);padding-bottom:2px}
+  .intro p{margin-top:10px;color:var(--muted)}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .pw-out{display:flex;gap:8px;margin-bottom:6px}
+  .pw-out input{flex:1;padding:14px 12px;border:1.5px solid var(--ink);border-radius:8px;font-family:var(--font-num);font-size:1.1rem;background:#fff;color:var(--text);min-width:0}
+  .btn{border:0;border-radius:8px;padding:12px 16px;font:inherit;font-weight:600;cursor:pointer}
+  .btn-copy{background:var(--ink);color:#fff;white-space:nowrap}
+  .btn-copy:hover{background:var(--ink-dark)}
+  .strength{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:12px 0 4px}
+  .strength div{height:100%;width:0;transition:width .2s,background .2s}
+  .strength-label{font-size:.8rem;color:var(--muted);margin-bottom:16px}
+  .opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:.94rem}
+  .opt label{display:flex;gap:9px;align-items:center;cursor:pointer}
+  .len-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+  .len-row input[type=range]{flex:1;accent-color:var(--ink)}
+  .len-val{font-family:var(--font-num);font-weight:600;font-size:1.1rem;width:2.2em;text-align:right}
+  .btn-new{width:100%;margin-top:14px;background:none;border:1.5px dashed var(--line);color:var(--ink);border-radius:8px;padding:12px;font:inherit;font-weight:600;cursor:pointer}
+  .btn-new:hover{border-color:var(--ink);background:#F5F7FC}
+  .know{margin-top:44px}
+  .know h2{color:var(--ink-dark);font-size:1.2rem;margin:26px 0 10px}
+  .know p{margin-bottom:12px}
+  details{border:1px solid var(--line);border-radius:8px;background:var(--paper);margin-bottom:9px}
+  summary{padding:13px 16px;font-weight:600;cursor:pointer;color:var(--ink-dark)}
+  details p{padding:0 16px 14px;margin:0}
+  footer.site{border-top:1px solid var(--line);color:var(--muted);font-size:.84rem;padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap;justify-content:center;background:var(--paper);margin-top:40px}
+  footer.site a{color:var(--muted)}
+  @media (max-width:600px){body{overflow-x:hidden}header.site{padding:12px 16px;gap:8px}header.site .claim{font-size:.78rem}main{padding:20px 14px 46px}.pw-out{flex-direction:column}.pw-out input{font-size:16px}.btn-copy{width:100%}}
+</style>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../"><span class="mark">N24</span>Nutzwerk24</a>
+  <span class="claim">Passwort-Generator – sicher, lokal, sofort.</span>
+</header>
+<main>
+  <div class="crumb"><a href="../">Nutzwerk24</a> › Passwort-Generator</div>
+  <div class="intro">
+    <h1>Passwort-Generator <em>– sicher &amp; lokal</em></h1>
+    <p>Kryptografisch sichere Passwörter, erzeugt direkt auf deinem Gerät. Nichts wird übertragen oder gespeichert.</p>
+  </div>
+
+  <div class="card">
+    <div class="pw-out">
+      <input type="text" id="pw" readonly aria-label="Generiertes Passwort" spellcheck="false" autocomplete="off">
+      <button type="button" class="btn btn-copy" id="btnCopy">Kopieren</button>
+    </div>
+    <div class="strength" aria-hidden="true"><div id="bar"></div></div>
+    <div class="strength-label" id="strengthLabel"></div>
+
+    <div class="len-row">
+      <span>Länge</span>
+      <input type="range" id="len" min="6" max="64" value="16" aria-label="Passwortlänge">
+      <span class="len-val" id="lenVal">16</span>
+    </div>
+    <div class="opt"><label><input type="checkbox" id="cUpper" checked> Großbuchstaben (A–Z)</label></div>
+    <div class="opt"><label><input type="checkbox" id="cLower" checked> Kleinbuchstaben (a–z)</label></div>
+    <div class="opt"><label><input type="checkbox" id="cDigits" checked> Zahlen (0–9)</label></div>
+    <div class="opt"><label><input type="checkbox" id="cSymbols" checked> Sonderzeichen (!@#…)</label></div>
+    <div class="opt"><label><input type="checkbox" id="cNoAmbig"> Verwechselbare Zeichen vermeiden (0/O, 1/l/I)</label></div>
+
+    <button type="button" class="btn-new" id="btnNew">↻ Neues Passwort erzeugen</button>
+  </div>
+
+  <section class="know">
+    <h2>Was ein Passwort wirklich sicher macht</h2>
+    <p><strong>Länge schlägt Tricks:</strong> Jedes zusätzliche Zeichen macht das Knacken um ein Vielfaches schwerer. 16 zufällige Zeichen sind praktisch unknackbar. <strong>Einzigartigkeit:</strong> Das beste Passwort nützt nichts, wenn es bei mehreren Diensten verwendet wird – ein Datenleck bei einem Dienst öffnet dann alle. <strong>Speicherung:</strong> Niemand merkt sich 50 Zufalls-Passwörter – dafür gibt es Passwort-Manager.</p>
+    <h2>Häufige Fragen</h2>
+    <details><summary>Kann jemand mein generiertes Passwort sehen?</summary><p>Nein. Das Passwort entsteht mit der Zufallsfunktion deines Browsers (crypto.getRandomValues) direkt auf deinem Gerät. Diese Seite hat keinen Server-Kontakt für die Generierung, speichert nichts und überträgt nichts.</p></details>
+    <details><summary>Wie lang sollte mein Passwort sein?</summary><p>Mindestens 12 Zeichen, besser 16+. Für wichtige Konten (E-Mail, Banking) gern 20+. Die Voreinstellung von 16 ist ein guter Standard.</p></details>
+    <details><summary>Sind Sonderzeichen Pflicht?</summary><p>Nicht zwingend – Länge ist wichtiger. Aber viele Dienste verlangen sie. Falls ein Dienst bestimmte Zeichen ablehnt, generiere einfach neu ohne Sonderzeichen und erhöhe die Länge.</p></details>
+  </section>
+</main>
+<footer class="site">
+  <span>Passwort-Generator – ein Werkzeug von <a href="../">Nutzwerk24</a></span>
+  <a href="../impressum.html">Impressum</a>
+  <a href="../datenschutz.html">Datenschutz</a>
+</footer>
+<script>
+(function(){
+  "use strict";
+  var sets={
+    upper:"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    lower:"abcdefghijklmnopqrstuvwxyz",
+    digits:"0123456789",
+    symbols:"!@#$%&*+-=?_~^"
+  };
+  var ambig="0O1lI";
+  function opts(){
+    return {
+      len:parseInt(document.getElementById("len").value,10),
+      upper:document.getElementById("cUpper").checked,
+      lower:document.getElementById("cLower").checked,
+      digits:document.getElementById("cDigits").checked,
+      symbols:document.getElementById("cSymbols").checked,
+      noAmbig:document.getElementById("cNoAmbig").checked
+    };
+  }
+  function pool(o){
+    var p="";
+    if(o.upper)p+=sets.upper;
+    if(o.lower)p+=sets.lower;
+    if(o.digits)p+=sets.digits;
+    if(o.symbols)p+=sets.symbols;
+    if(o.noAmbig)p=p.split("").filter(function(c){return ambig.indexOf(c)<0;}).join("");
+    return p;
+  }
+  function randInt(max){
+    var lim=Math.floor(4294967296/max)*max, x;
+    var buf=new Uint32Array(1);
+    do{ crypto.getRandomValues(buf); x=buf[0]; }while(x>=lim);
+    return x%max;
+  }
+  function generate(){
+    var o=opts(), p=pool(o);
+    var out=document.getElementById("pw");
+    if(!p){ out.value=""; rate(""); return; }
+    // Garantie: aus jeder gewählten Kategorie mind. 1 Zeichen
+    var groups=[];
+    ["upper","lower","digits","symbols"].forEach(function(k){
+      if(o[k]){
+        var g=sets[k];
+        if(o.noAmbig)g=g.split("").filter(function(c){return ambig.indexOf(c)<0;}).join("");
+        if(g)groups.push(g);
+      }
+    });
+    var chars=[];
+    groups.forEach(function(g){ chars.push(g[randInt(g.length)]); });
+    while(chars.length<o.len){ chars.push(p[randInt(p.length)]); }
+    // Fisher-Yates mit crypto
+    for(var i=chars.length-1;i>0;i--){ var j=randInt(i+1); var t=chars[i];chars[i]=chars[j];chars[j]=t; }
+    out.value=chars.slice(0,o.len).join("");
+    rate(out.value,p.length);
+  }
+  function rate(pw,poolSize){
+    var bar=document.getElementById("bar"), lbl=document.getElementById("strengthLabel");
+    if(!pw){ bar.style.width="0"; lbl.textContent="Mindestens eine Zeichenart wählen."; return; }
+    var bits=Math.round(pw.length*Math.log2(poolSize||26));
+    var w,c,t;
+    if(bits<50){w="25%";c="var(--bad)";t="schwach";}
+    else if(bits<70){w="50%";c="var(--warn)";t="okay";}
+    else if(bits<100){w="75%";c="var(--win)";t="stark";}
+    else {w="100%";c="var(--win)";t="sehr stark";}
+    bar.style.width=w; bar.style.background=c;
+    lbl.textContent="Stärke: "+t+" (~"+bits+" Bit Entropie)";
+  }
+  document.getElementById("len").addEventListener("input",function(){
+    document.getElementById("lenVal").textContent=this.value;
+    generate();
+  });
+  ["cUpper","cLower","cDigits","cSymbols","cNoAmbig"].forEach(function(id){
+    document.getElementById(id).addEventListener("change",generate);
+  });
+  document.getElementById("btnNew").addEventListener("click",generate);
+  document.getElementById("btnCopy").addEventListener("click",function(){
+    var pw=document.getElementById("pw").value;
+    if(!pw)return;
+    (navigator.clipboard?navigator.clipboard.writeText(pw):Promise.reject()).then(function(){
+      var b=document.getElementById("btnCopy");
+      b.textContent="✓ Kopiert!";
+      setTimeout(function(){b.textContent="Kopieren";},2000);
+    }).catch(function(){});
+  });
+  generate();
+})();
+</script>
+</body>
+</html>

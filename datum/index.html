@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tage-Rechner – Tage zwischen zwei Daten & Datum plus Tage berechnen</title>
+<meta name="description" content="Datumsrechner online: Tage zwischen zwei Daten zählen oder ein Datum plus/minus X Tage berechnen – mit Wochentag. Perfekt für Fristen, Countdowns und Planung. Kostenlos.">
+<link rel="canonical" href="https://nutzwerk24.de/datum/">
+<meta property="og:title" content="Tage-Rechner – Tage zählen & Fristen berechnen">
+<meta property="og:description" content="Tage zwischen zwei Daten oder Datum ± X Tage – sofort, kostenlos, ohne Anmeldung.">
+<meta property="og:image" content="https://nutzwerk24.de/og-image.png">
+<meta property="og:url" content="https://nutzwerk24.de/datum/">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link href="../fonts/fonts.css" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Wie berechne ich die Tage zwischen zwei Daten?","acceptedAnswer":{"@type":"Answer","text":"Trage Start- und Enddatum ein – der Rechner zählt die Kalendertage dazwischen und zeigt zusätzlich Wochen und Werktage (Montag bis Freitag) an."}},
+{"@type":"Question","name":"Wie berechne ich ein Datum in X Tagen?","acceptedAnswer":{"@type":"Answer","text":"Wähle ein Startdatum und die Anzahl der Tage. Der Rechner zeigt das Zieldatum samt Wochentag – auch rückwärts mit Minus-Tagen."}},
+{"@type":"Question","name":"Zählt der Rechner Werktage?","acceptedAnswer":{"@type":"Answer","text":"Ja, der Rechner zeigt neben Kalendertagen auch die Zahl der Werktage (Mo–Fr) zwischen beiden Daten. Gesetzliche Feiertage werden dabei nicht abgezogen, da sie je nach Bundesland unterschiedlich sind."}}
+]}
+</script>
+<style>
+  :root{--ink:#23409F;--ink-dark:#182C6B;--paper:#FDFDFB;--desk:#EDF0F4;--text:#16202E;--muted:#5B6B7E;--line:#D4DAE3;--win:#1E7F4F;--radius:10px;
+    --font-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--font-num:"IBM Plex Mono","Consolas",monospace}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-ui);background:var(--desk);color:var(--text);line-height:1.55}
+  a{color:var(--ink)}
+  :focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:4px}
+  header.site{background:var(--paper);border-bottom:2px solid var(--ink);padding:14px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .wordmark{font-weight:700;font-size:1.05rem;color:var(--ink-dark);text-decoration:none;display:flex;align-items:center;gap:9px}
+  .wordmark .mark{width:26px;height:26px;background:var(--ink);border-radius:7px;display:grid;place-items:center;font-family:var(--font-num);font-size:.8rem;font-weight:600;color:#fff}
+  header.site .claim{color:var(--muted);font-size:.88rem}
+  main{max-width:860px;margin:0 auto;padding:28px 20px 60px}
+  .crumb{font-size:.82rem;color:var(--muted);margin-bottom:14px}
+  .crumb a{color:var(--muted)}
+  .intro{text-align:center;margin-bottom:26px}
+  .intro h1{font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.2;color:var(--ink-dark)}
+  .intro h1 em{font-style:normal;border-bottom:4px solid var(--ink);padding-bottom:2px}
+  .intro p{margin-top:10px;color:var(--muted)}
+  .calcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+  .calc{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .calc h2{font-size:1.02rem;color:var(--ink-dark);margin-bottom:4px}
+  .calc .bsp{font-size:.78rem;color:var(--muted);margin-bottom:14px}
+  label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:3px}
+  .field{margin-bottom:10px}
+  input[type=date],input[type=text]{width:100%;padding:10px;border:1px solid var(--line);border-radius:6px;font:inherit;font-size:.95rem;background:#fff;color:var(--text)}
+  input[type=text].num{font-family:var(--font-num);text-align:right}
+  input:focus{border-color:var(--ink)}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .res{margin-top:8px;padding:14px;background:var(--desk);border-radius:8px;font-size:.95rem}
+  .res strong{font-family:var(--font-num);font-size:1.35rem;color:var(--win);display:block;margin-bottom:2px}
+  .res .sub{font-size:.82rem;color:var(--muted)}
+  .know{max-width:760px;margin:50px auto 0}
+  .know h2{color:var(--ink-dark);font-size:1.2rem;margin:26px 0 10px}
+  .know p{margin-bottom:12px}
+  details{border:1px solid var(--line);border-radius:8px;background:var(--paper);margin-bottom:9px}
+  summary{padding:13px 16px;font-weight:600;cursor:pointer;color:var(--ink-dark)}
+  details p{padding:0 16px 14px;margin:0}
+  footer.site{border-top:1px solid var(--line);color:var(--muted);font-size:.84rem;padding:22px 24px;display:flex;gap:18px;flex-wrap:wrap;justify-content:center;background:var(--paper);margin-top:40px}
+  footer.site a{color:var(--muted)}
+  @media (max-width:600px){body{overflow-x:hidden}header.site{padding:12px 16px;gap:8px}header.site .claim{font-size:.78rem}main{padding:20px 14px 46px}input[type=date],input[type=text]{font-size:16px}}
+</style>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark" href="../"><span class="mark">N24</span>Nutzwerk24</a>
+  <span class="claim">Tage-Rechner – Fristen &amp; Countdowns im Griff.</span>
+</header>
+<main>
+  <div class="crumb"><a href="../">Nutzwerk24</a> › Tage-Rechner</div>
+  <div class="intro">
+    <h1>Tage- &amp; Datumsrechner <em>– zählen und planen</em></h1>
+    <p>Wie viele Tage bis …? Welches Datum ist in 90 Tagen? Beide Antworten sofort.</p>
+  </div>
+
+  <div class="calcs">
+    <div class="calc">
+      <h2>Tage zwischen zwei Daten</h2>
+      <p class="bsp">z. B. Tage bis zum Urlaub oder seit einem Ereignis</p>
+      <div class="duo">
+        <div class="field"><label for="von">Von</label><input type="date" id="von"></div>
+        <div class="field"><label for="bis">Bis</label><input type="date" id="bis"></div>
+      </div>
+      <div class="res" id="resDiff">Beide Daten wählen …</div>
+    </div>
+
+    <div class="calc">
+      <h2>Datum plus/minus Tage</h2>
+      <p class="bsp">z. B. Frist: „30 Tage ab heute" – auch minus (−14)</p>
+      <div class="duo">
+        <div class="field"><label for="start">Startdatum</label><input type="date" id="start"></div>
+        <div class="field"><label for="plusTage">Tage (+/−)</label><input type="text" id="plusTage" class="num" inputmode="numeric" value="30"></div>
+      </div>
+      <div class="res" id="resPlus">Startdatum wählen …</div>
+    </div>
+  </div>
+
+  <section class="know">
+    <h2>Wofür Menschen den Tage-Rechner nutzen</h2>
+    <p><strong>Fristen:</strong> Widerruf (14 Tage), Zahlungsziele (30 Tage), Kündigungsfristen, Probezeit-Ende. <strong>Planung:</strong> Tage bis Urlaub, Hochzeit oder Prüfung. <strong>Rückblick:</strong> Wie alt ist etwas in Tagen? Der Rechner zeigt zu jedem Ergebnis den Wochentag – wichtig, wenn eine Frist auf ein Wochenende fällt.</p>
+    <h2>Häufige Fragen</h2>
+    <details><summary>Werden Start- und Endtag mitgezählt?</summary><p>Der Rechner zählt die Differenz der Kalendertage (Endtag minus Starttag). Vom 1. zum 3. eines Monats sind es also 2 Tage. Für „inklusive beider Tage" rechne +1.</p></details>
+    <details><summary>Zählt der Rechner Werktage?</summary><p>Ja, er zeigt zusätzlich die Werktage (Mo–Fr) an. Gesetzliche Feiertage zieht er nicht ab, da diese je Bundesland verschieden sind.</p></details>
+    <details><summary>Was passiert bei einer Frist am Wochenende?</summary><p>Bei gesetzlichen Fristen gilt in Deutschland meist: Fällt das Fristende auf Samstag, Sonntag oder Feiertag, verschiebt es sich auf den nächsten Werktag (§ 193 BGB).</p></details>
+  </section>
+</main>
+<footer class="site">
+  <span>Tage-Rechner – ein Werkzeug von <a href="../">Nutzwerk24</a></span>
+  <a href="../impressum.html">Impressum</a>
+  <a href="../datenschutz.html">Datenschutz</a>
+</footer>
+<script>
+(function(){
+  "use strict";
+  var TAG=86400000;
+  var wt=["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
+  var nf=new Intl.NumberFormat("de-DE");
+  function d(id){var v=document.getElementById(id).value;return v?new Date(v+"T12:00:00"):null;}
+  function fmt(dt){return wt[dt.getDay()]+", "+String(dt.getDate()).padStart(2,"0")+"."+String(dt.getMonth()+1).padStart(2,"0")+"."+dt.getFullYear();}
+  function werktage(a,b){
+    var von=a<b?a:b, bis=a<b?b:a, n=0, cur=new Date(von);
+    while(cur<bis){ cur.setDate(cur.getDate()+1); var day=cur.getDay(); if(day!==0&&day!==6)n++; }
+    return n;
+  }
+  function calcDiff(){
+    var a=d("von"), b=d("bis"), el=document.getElementById("resDiff");
+    if(!a||!b){el.innerHTML="Beide Daten wählen …";return;}
+    var tage=Math.round((b-a)/TAG);
+    var abs=Math.abs(tage);
+    var wo=Math.floor(abs/7), rest=abs%7;
+    el.innerHTML="<strong>"+nf.format(tage)+" Tage</strong>"+
+      "<span class='sub'>= "+wo+" Wochen"+(rest?" + "+rest+" Tage":"")+" · "+nf.format(werktage(a,b))+" Werktage (Mo–Fr)"+
+      (tage<0?" · Enddatum liegt vor dem Start":"")+"</span>";
+  }
+  function calcPlus(){
+    var s=d("start"), el=document.getElementById("resPlus");
+    var t=parseInt(document.getElementById("plusTage").value.replace(",","."),10);
+    if(!s||!isFinite(t)){el.innerHTML="Startdatum und Tage angeben …";return;}
+    var ziel=new Date(s); ziel.setDate(ziel.getDate()+t);
+    el.innerHTML="<strong>"+fmt(ziel)+"</strong><span class='sub'>"+(t>=0?t+" Tage nach ":Math.abs(t)+" Tage vor ")+fmt(s).split(", ")[1]+"</span>";
+  }
+  ["von","bis"].forEach(function(id){document.getElementById(id).addEventListener("input",calcDiff);});
+  ["start","plusTage"].forEach(function(id){document.getElementById(id).addEventListener("input",calcPlus);});
+  var heute=new Date(); var iso=heute.toISOString().slice(0,10);
+  document.getElementById("von").value=iso;
+  document.getElementById("start").value=iso;
+  calcDiff(); calcPlus();
+})();
+</script>
+</body>
+</html>
